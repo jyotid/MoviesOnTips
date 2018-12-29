@@ -11,6 +11,7 @@ import io.reactivex.Single
  * Created by jyotidubey on 28/12/18.
  */
 class MovieControllerImpl(private var api: MovieApi) : MovieController {
+
     override fun getTopRatedMovies() : Single<MovieListResponse> {
         return Single.create { s ->
             api.getTopRatedMovies(object : ApiResponseCallback<MovieListResponse> {
@@ -21,7 +22,6 @@ class MovieControllerImpl(private var api: MovieApi) : MovieController {
                     s.onError(throwable)
                 }
             })
-
         }
     }
 
