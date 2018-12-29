@@ -1,4 +1,4 @@
-package com.jaede.moviesontips.api
+package com.jaede.moviesontips.data.api
 
 /**
  * Created by jyotidubey on 28/12/18.

@@ -1,4 +1,4 @@
-package com.jaede.moviesontips.data.api;
+package com.jaede.moviesontips.data.api.retrofit;
 
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
@@ -18,7 +18,7 @@ public class MovieServiceGenerator {
       .client(httpClient.build())
       .addConverterFactory(GsonConverterFactory.create());
 
-  private static Retrofit retrofit = builder.build();
+  public static Retrofit retrofit = builder.build();
 
   public static <S> S createService(Class<S> serviceClass) {
       return retrofit.create(serviceClass);
