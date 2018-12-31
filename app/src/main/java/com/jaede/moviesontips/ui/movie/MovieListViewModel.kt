@@ -18,15 +18,30 @@ class MovieListViewModel(private var controller: MovieController) : ViewModel() 
     }
 
     init {
-        loadMovies()
+        loadNowRunningMovies()
     }
 
-    private fun loadMovies(){
+    fun loadNowRunningMovies(){
         controller.getNowPlayingMovies()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({movieResponse-> item.value = movieResponse.movies},{})
     }
+
+    fun loadUpcomingMovies(){
+        controller.getUpcomingMovies()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({movieResponse-> item.value = movieResponse.movies},{})
+    }
+    fun loadTopRatedMovies(){
+        controller.getTopRatedMovies()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({movieResponse-> item.value = movieResponse.movies},{})
+    }
+
+
 
     class ViewModelProviderFactory(private var controller: MovieController) : ViewModelProvider.NewInstanceFactory() {
 

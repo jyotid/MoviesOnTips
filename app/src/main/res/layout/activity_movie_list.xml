@@ -3,15 +3,48 @@
   xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:bind="http://schemas.android.com/apk/res-auto">
   <data>
+   <import type="com.jaede.moviesontips.R"/>
     <variable
       name="state"
       type="com.jaede.moviesontips.ui.movie.MovieListUiState"/>
+    <variable
+      name="handler"
+      type="com.jaede.moviesontips.ui.movie.MovieListUiState.MovieTypeSelectionHandler"/>
   </data>
 
   <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:fitsSystemWindows="true">
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:weightSum="3"
+    android:fitsSystemWindows="true">
+    <TextView
+      android:id="@+id/topRated"
+      android:layout_width="0dp"
+      android:layout_weight="1"
+      android:layout_height="wrap_content"
+      android:text="Latest movies"
+      android:onClick="@{(v)->handler.onMovieSectionChanged(R.id.topRated)}"/>
+    <TextView
+      android:id="@+id/nowRunning"
+      android:layout_width="0dp"
+      android:layout_weight="1"
+      android:layout_height="wrap_content"
+      android:text="Now running"
+      android:onClick="@{(v)->handler.onMovieSectionChanged(R.id.nowRunning)}"/>
+    <TextView
+      android:id="@+id/upcoming"
+      android:layout_width="0dp"
+      android:layout_weight="1"
+      android:layout_height="wrap_content"
+      android:text="Top movies"
+      android:onClick="@{(v)->handler.onMovieSectionChanged(R.id.upcoming)}"/>
+  </LinearLayout>
 
     <android.support.v4.view.ViewPager
       android:id="@+id/viewPager"
@@ -26,6 +59,7 @@
       android:paddingRight="@dimen/card_padding"
       android:paddingStart="@dimen/card_padding"
       bind:items="@{state.movies}"/>
+
 
   </LinearLayout>
 </layout>

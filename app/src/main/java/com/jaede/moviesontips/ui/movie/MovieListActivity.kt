@@ -13,7 +13,7 @@ import com.jaede.moviesontips.data.api.retrofit.MovieServiceGenerator
 import com.jaede.moviesontips.databinding.ActivityMovieListBinding
 import kotlinx.android.synthetic.main.activity_movie_list.*
 
-class MovieListActivity : AppCompatActivity() {
+class MovieListActivity : AppCompatActivity(), MovieListUiState.MovieTypeSelectionHandler  {
 
     private val factory = MovieListViewModel.ViewModelProviderFactory(MovieControllerImpl(MovieApiImpl(MovieServiceGenerator.createService(MovieService::class.java))))
     private val uiState = MovieListUiState()
@@ -32,6 +32,8 @@ class MovieListActivity : AppCompatActivity() {
     private fun setDatabindingVariables(){
         with(binding){
             state = uiState
+            handler = this@MovieListActivity
+
         }
     }
 
@@ -39,6 +41,14 @@ class MovieListActivity : AppCompatActivity() {
         viewModel.item.observe(this, Observer {
             it?.let { uiState.updateMovies(it) }
         })
+    }
+    override fun onMovieSectionChanged(viewType: Int) {
+       when (viewType){
+           R.id.upcoming->viewModel.loadUpcomingMovies()
+           R.id.topRated->viewModel.loadTopRatedMovies()
+           else->viewModel.loadNowRunningMovies()
+       }
+
     }
 
 }
