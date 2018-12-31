@@ -16,7 +16,7 @@ public class ViewPagerBinding {
     adapter.clear();
     adapter.addItems(items);
     adapter.notifyDataSetChanged();
-    viewPager.setAdapter(null);
+    viewPager.setAdapter(null); //This workaround is done because notifydatasetchaned() does change fragments
     viewPager.setAdapter(adapter);
   }
 
