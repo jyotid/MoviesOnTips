@@ -5,16 +5,17 @@ import android.arch.lifecycle.ViewModelProviders
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.LinearLayoutManager
 import com.jaede.moviesontips.R
 import com.jaede.moviesontips.controller.MovieControllerImpl
 import com.jaede.moviesontips.data.api.MovieApiImpl
 import com.jaede.moviesontips.data.api.retrofit.MovieService
 import com.jaede.moviesontips.data.api.retrofit.MovieServiceGenerator
+import com.jaede.moviesontips.data.model.Movie
 import com.jaede.moviesontips.databinding.ActivityMovieListBinding
 import kotlinx.android.synthetic.main.activity_movie_list.*
 
-class MovieListActivity : AppCompatActivity(), MovieListUiState.MovieTypeSelectionHandler  {
-
+class MovieListActivity : AppCompatActivity(), MovieListUiState.MovieTypeSelectionHandler, MovieItemUiState.MovieSelectionHandler {
     private val factory = MovieListViewModel.ViewModelProviderFactory(MovieControllerImpl(MovieApiImpl(MovieServiceGenerator.createService(MovieService::class.java))))
     private val uiState = MovieListUiState()
     private lateinit var viewModel : MovieListViewModel
@@ -24,7 +25,8 @@ class MovieListActivity : AppCompatActivity(), MovieListUiState.MovieTypeSelecti
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this@MovieListActivity, R.layout.activity_movie_list)
         viewModel = ViewModelProviders.of(this,factory).get(MovieListViewModel::class.java)
-        viewPager.adapter = MovieListPagerAdapter(supportFragmentManager, mutableListOf())
+        viewPager.layoutManager = LinearLayoutManager(this)
+        viewPager.adapter = MovieListAdapter(mutableListOf(),this)
         setDatabindingVariables()
         setLiveDataObservers()
     }
@@ -37,6 +39,9 @@ class MovieListActivity : AppCompatActivity(), MovieListUiState.MovieTypeSelecti
         }
     }
 
+    override fun onMovieSelected(movie: Movie) {
+        System.out.println("Entering here with movie id ${movie.title}")
+    }
     private fun setLiveDataObservers(){
         viewModel.item.observe(this, Observer {
             it?.let { uiState.updateMovies(it) }

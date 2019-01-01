@@ -1,8 +1,8 @@
 package com.jaede.moviesontips.ui.binding;
 
 import android.databinding.BindingAdapter;
-import android.support.v4.view.ViewPager;
-import com.jaede.moviesontips.ui.movie.MovieListPagerAdapter;
+import android.support.v7.widget.RecyclerView;
+import com.jaede.moviesontips.ui.movie.MovieListAdapter;
 import java.util.ArrayList;
 
 /**
@@ -11,13 +11,11 @@ import java.util.ArrayList;
 
 public class ViewPagerBinding {
   @BindingAdapter({"items"})
-  public static void setAdapter(ViewPager viewPager, ArrayList items) {
-    MovieListPagerAdapter adapter = (MovieListPagerAdapter) viewPager.getAdapter();
-    adapter.clear();
+  public static void setAdapter(RecyclerView recyclerView, ArrayList items) {
+    MovieListAdapter adapter = (MovieListAdapter) recyclerView.getAdapter();
     adapter.addItems(items);
     adapter.notifyDataSetChanged();
-    viewPager.setAdapter(null); //This workaround is done because notifydatasetchaned() does change fragments
-    viewPager.setAdapter(adapter);
+
   }
 
 }

@@ -13,8 +13,8 @@ import io.reactivex.schedulers.Schedulers
  */
 class MovieListViewModel(private var controller: MovieController) : ViewModel() {
 
-    val item : MutableLiveData<List<Movie>> by lazy {
-        MutableLiveData<List<Movie>>()
+    val item : MutableLiveData<List<MovieItemUiState>> by lazy {
+        MutableLiveData<List<MovieItemUiState>>()
     }
 
     init {
@@ -23,23 +23,37 @@ class MovieListViewModel(private var controller: MovieController) : ViewModel() 
 
     fun loadNowRunningMovies(){
         controller.getNowPlayingMovies()
+                .map { movieResponse->movieResponse.movies  }
+                .map { movies->
+                    val movieItemUiState= mutableListOf<MovieItemUiState>()
+                    movies.mapTo(movieItemUiState) { MovieItemUiState(it) }
+                }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({movieResponse-> item.value = movieResponse.movies},{})
+                .subscribe({movies-> item.value = movies},{})
     }
 
     fun loadUpcomingMovies(){
         controller.getUpcomingMovies()
+                .map { movieResponse->movieResponse.movies  }
+                .map { movies->
+                    val movieItemUiState= mutableListOf<MovieItemUiState>()
+                    movies.mapTo(movieItemUiState) { MovieItemUiState(it) }
+                }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({movieResponse-> item.value = movieResponse.movies},{})
-    }
+                .subscribe({movies-> item.value = movies},{})    }
+
     fun loadTopRatedMovies(){
         controller.getTopRatedMovies()
+                .map { movieResponse->movieResponse.movies  }
+                .map { movies->
+                    val movieItemUiState= mutableListOf<MovieItemUiState>()
+                    movies.mapTo(movieItemUiState) { MovieItemUiState(it) }
+                }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({movieResponse-> item.value = movieResponse.movies},{})
-    }
+                .subscribe({movies-> item.value = movies},{})    }
 
 
 

@@ -4,15 +4,11 @@ import android.databinding.ObservableField
 import com.jaede.moviesontips.data.model.Movie
 
 /**
- * Created by jyotidubey on 29/12/18.
+ * Created by jyotidubey on 02/01/19.
  */
-class MovieItemUiState{
-
-    val movie = ObservableField<Movie>()
-
-    fun updateMovie(movie: Movie){
-        this.movie.set(movie)
+class MovieItemUiState(val movie: Movie) {
+    interface MovieSelectionHandler {
+        fun onMovieSelected(movie: Movie)
     }
-
 
 }

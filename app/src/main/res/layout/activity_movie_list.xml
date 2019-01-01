@@ -58,7 +58,7 @@
       android:onClick="@{(v)->handler.onMovieSectionChanged(R.id.topRated)}"/>
   </LinearLayout>
 
-    <android.support.v4.view.ViewPager
+    <android.support.v7.widget.RecyclerView
       android:id="@+id/viewPager"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
@@ -68,7 +68,6 @@
       android:clipToPadding="false"
       android:overScrollMode="never"
       android:paddingBottom="30dp"
-      android:paddingHorizontal="@dimen/card_padding"
       bind:items="@{state.movies}"/>
 
 
