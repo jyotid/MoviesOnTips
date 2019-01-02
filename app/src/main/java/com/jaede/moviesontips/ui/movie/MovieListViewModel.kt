@@ -4,14 +4,18 @@ import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
 import com.jaede.moviesontips.controller.MovieController
+import com.jaede.moviesontips.data.model.ApiError
 import com.jaede.moviesontips.data.model.Movie
+import com.jaede.moviesontips.ui.base.BaseViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
 /**
+ * TODO:Ensure that whenever new movie type is selected, previous should get cancelled
+ * TODO: Fetch movie detail and display
  * Created by jyotidubey on 29/12/18.
  */
-class MovieListViewModel(private var controller: MovieController) : ViewModel() {
+class MovieListViewModel(private var controller: MovieController) : BaseViewModel() {
 
     val item : MutableLiveData<List<MovieItemUiState>> by lazy {
         MutableLiveData<List<MovieItemUiState>>()
@@ -30,7 +34,7 @@ class MovieListViewModel(private var controller: MovieController) : ViewModel() 
                 }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({movies-> item.value = movies},{})
+                .subscribe({movies-> item.value = movies },{})
     }
 
     fun loadUpcomingMovies(){
