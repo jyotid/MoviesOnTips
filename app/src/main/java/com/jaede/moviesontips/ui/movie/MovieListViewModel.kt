@@ -4,11 +4,12 @@ import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
 import com.jaede.moviesontips.controller.MovieController
-import com.jaede.moviesontips.data.model.ApiError
-import com.jaede.moviesontips.data.model.Movie
+import com.jaede.moviesontips.data.model.MovieListResponse
 import com.jaede.moviesontips.ui.base.BaseViewModel
+import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import io.reactivex.subjects.PublishSubject
 
 /**
  * TODO:Ensure that whenever new movie type is selected, previous should get cancelled
@@ -17,49 +18,39 @@ import io.reactivex.schedulers.Schedulers
  */
 class MovieListViewModel(private var controller: MovieController) : BaseViewModel() {
 
-    val item : MutableLiveData<List<MovieItemUiState>> by lazy {
+    enum class MOVIE_TYPE {
+        NOW_RUNNING, UPCOMING, TOP_RATED
+    }
+
+    val item: MutableLiveData<List<MovieItemUiState>> by lazy {
         MutableLiveData<List<MovieItemUiState>>()
     }
 
+    val subject = PublishSubject.create<MOVIE_TYPE>()
+
     init {
-        loadNowRunningMovies()
+        subscribeForFetchingMovies()
     }
 
-    fun loadNowRunningMovies(){
-        controller.getNowPlayingMovies()
-                .map { movieResponse->movieResponse.movies  }
-                .map { movies->
-                    val movieItemUiState= mutableListOf<MovieItemUiState>()
+    private fun subscribeForFetchingMovies() {
+        subject
+                .switchMapSingle { type->
+                    when(type){
+                        MOVIE_TYPE.NOW_RUNNING->return@switchMapSingle controller.getNowPlayingMovies().onErrorReturn { MovieListResponse() }
+                        MOVIE_TYPE.UPCOMING->return@switchMapSingle controller.getUpcomingMovies().onErrorReturn { MovieListResponse() }
+                        MOVIE_TYPE.TOP_RATED->return@switchMapSingle controller.getTopRatedMovies().onErrorReturn { MovieListResponse() }
+                    }
+                }
+                .map { movieResponse ->
+                    val movies = movieResponse.movies
+                    val movieItemUiState = mutableListOf<MovieItemUiState>()
                     movies.mapTo(movieItemUiState) { MovieItemUiState(it) }
                 }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({movies-> item.value = movies },{})
+                .subscribe ({movies -> this.item.value = movies },{ err-> System.out.println("ERRORRRRR")})
+
     }
-
-    fun loadUpcomingMovies(){
-        controller.getUpcomingMovies()
-                .map { movieResponse->movieResponse.movies  }
-                .map { movies->
-                    val movieItemUiState= mutableListOf<MovieItemUiState>()
-                    movies.mapTo(movieItemUiState) { MovieItemUiState(it) }
-                }
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({movies-> item.value = movies},{})    }
-
-    fun loadTopRatedMovies(){
-        controller.getTopRatedMovies()
-                .map { movieResponse->movieResponse.movies  }
-                .map { movies->
-                    val movieItemUiState= mutableListOf<MovieItemUiState>()
-                    movies.mapTo(movieItemUiState) { MovieItemUiState(it) }
-                }
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({movies-> item.value = movies},{})    }
-
-
 
     class ViewModelProviderFactory(private var controller: MovieController) : ViewModelProvider.NewInstanceFactory() {
 
@@ -71,3 +62,5 @@ class MovieListViewModel(private var controller: MovieController) : BaseViewMode
         }
     }
 }
+
+

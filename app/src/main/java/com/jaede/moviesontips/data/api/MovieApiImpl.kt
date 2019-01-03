@@ -2,6 +2,7 @@ package com.jaede.moviesontips.data.api
 
 import com.jaede.moviesontips.BuildConfig
 import com.jaede.moviesontips.data.api.retrofit.MovieService
+import com.jaede.moviesontips.data.model.ApiError
 import com.jaede.moviesontips.data.model.MovieListResponse
 import com.jaede.moviesontips.data.model.PostResponseStatus
 import com.jaede.moviesontips.data.model.Rating
@@ -14,9 +15,6 @@ import retrofit2.Response
  * Created by jyotidubey on 28/12/18.
  */
 class MovieApiImpl(private var service: MovieService) : MovieApi {
-//    init {
-//        service = MovieServiceGenerator.createService(MovieService::class.java)
-//    }
 
     override fun getTopRatedMovies(callback: ApiResponseCallback<MovieListResponse>) {
         service.getTopRatedMovies(BuildConfig.ApiKey, "en-US", 1)
@@ -32,7 +30,7 @@ class MovieApiImpl(private var service: MovieService) : MovieApi {
                     }
 
                     override fun onFailure(call: Call<MovieListResponse>, throwable: Throwable) {
-                        callback.onError(throwable)
+                        callback.onError(ApiError())
                     }
                 })
     }
@@ -51,7 +49,7 @@ class MovieApiImpl(private var service: MovieService) : MovieApi {
                     }
 
                     override fun onFailure(call: Call<MovieListResponse>, throwable: Throwable) {
-                        callback.onError(throwable)
+                        callback.onError(ApiError())
                     }
                 })
     }
@@ -71,7 +69,7 @@ class MovieApiImpl(private var service: MovieService) : MovieApi {
                     }
 
                     override fun onFailure(call: Call<MovieListResponse>, throwable: Throwable) {
-                        callback.onError(throwable)
+                        callback.onError(ApiError())
                     }
                 })
     }
@@ -91,7 +89,7 @@ class MovieApiImpl(private var service: MovieService) : MovieApi {
                     }
 
                     override fun onFailure(call: Call<PostResponseStatus>, throwable: Throwable) {
-                        callback.onError(throwable)
+                        callback.onError(ApiError())
                     }
                 })
     }

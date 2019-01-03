@@ -2,6 +2,7 @@ package com.jaede.moviesontips.controller
 
 import com.jaede.moviesontips.data.api.ApiResponseCallback
 import com.jaede.moviesontips.data.api.MovieApi
+import com.jaede.moviesontips.data.model.ApiError
 import com.jaede.moviesontips.data.model.MovieListResponse
 import com.jaede.moviesontips.data.model.PostResponseStatus
 import com.jaede.moviesontips.data.model.Rating
@@ -18,7 +19,7 @@ class MovieControllerImpl(private var api: MovieApi) : MovieController {
                 override fun onSuccess(response: MovieListResponse) {
                     s.onSuccess(response)
                 }
-                override fun onError(throwable: Throwable) {
+                override fun onError(throwable: ApiError) {
                     s.onError(throwable)
                 }
             })
@@ -31,7 +32,7 @@ class MovieControllerImpl(private var api: MovieApi) : MovieController {
                 override fun onSuccess(response: MovieListResponse) {
                     s.onSuccess(response)
                 }
-                override fun onError(throwable: Throwable) {
+                override fun onError(throwable: ApiError) {
                     s.onError(throwable)
                 }
             })
@@ -44,7 +45,7 @@ class MovieControllerImpl(private var api: MovieApi) : MovieController {
                 override fun onSuccess(response: MovieListResponse) {
                     s.onSuccess(response)
                 }
-                override fun onError(throwable: Throwable) {
+                override fun onError(throwable: ApiError) {
                     s.onError(throwable)
                 }
             })
@@ -58,7 +59,7 @@ class MovieControllerImpl(private var api: MovieApi) : MovieController {
                 override fun onSuccess(response: PostResponseStatus) {
                     s.onSuccess(response)
                 }
-                override fun onError(throwable: Throwable) {
+                override fun onError(throwable: ApiError) {
                     s.onError(throwable)
                 }
             })

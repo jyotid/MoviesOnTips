@@ -11,8 +11,12 @@ import com.jaede.moviesontips.data.api.MovieApiImpl
 import com.jaede.moviesontips.data.api.retrofit.MovieService
 import com.jaede.moviesontips.data.api.retrofit.MovieServiceGenerator
 import com.jaede.moviesontips.data.model.Movie
+import com.jaede.moviesontips.data.model.MovieListResponse
 import com.jaede.moviesontips.databinding.ActivityMovieListBinding
 import com.jaede.moviesontips.ui.base.BaseActivity
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_movie_list.*
 
 class MovieListActivity : BaseActivity(), MovieListUiState.MovieTypeSelectionHandler, MovieItemUiState.MovieSelectionHandler {
@@ -29,6 +33,7 @@ class MovieListActivity : BaseActivity(), MovieListUiState.MovieTypeSelectionHan
         viewPager.adapter = MovieListAdapter(mutableListOf(),this)
         setDatabindingVariables()
         setLiveDataObservers()
+        viewModel.subject.onNext(MovieListViewModel.MOVIE_TYPE.NOW_RUNNING)
     }
 
     private fun setDatabindingVariables(){
@@ -48,11 +53,12 @@ class MovieListActivity : BaseActivity(), MovieListUiState.MovieTypeSelectionHan
         })
     }
     override fun onMovieSectionChanged(viewType: Int) {
-       when (viewType){
-           R.id.upcoming->viewModel.loadUpcomingMovies()
-           R.id.topRated->viewModel.loadTopRatedMovies()
-           else->viewModel.loadNowRunningMovies()
-       }
+        when(viewType) {
+            R.id.upcoming->viewModel.subject.onNext(MovieListViewModel.MOVIE_TYPE.UPCOMING)
+            R.id.topRated->viewModel.subject.onNext(MovieListViewModel.MOVIE_TYPE.TOP_RATED)
+            R.id.nowRunning->viewModel.subject.onNext(MovieListViewModel.MOVIE_TYPE.NOW_RUNNING)
+            else->viewModel.subject.onNext(MovieListViewModel.MOVIE_TYPE.NOW_RUNNING)
+        }
 
     }
 
