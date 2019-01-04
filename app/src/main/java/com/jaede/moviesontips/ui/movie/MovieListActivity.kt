@@ -11,12 +11,8 @@ import com.jaede.moviesontips.data.api.MovieApiImpl
 import com.jaede.moviesontips.data.api.retrofit.MovieService
 import com.jaede.moviesontips.data.api.retrofit.MovieServiceGenerator
 import com.jaede.moviesontips.data.model.Movie
-import com.jaede.moviesontips.data.model.MovieListResponse
 import com.jaede.moviesontips.databinding.ActivityMovieListBinding
 import com.jaede.moviesontips.ui.base.BaseActivity
-import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_movie_list.*
 
 class MovieListActivity : BaseActivity(), MovieListUiState.MovieTypeSelectionHandler, MovieItemUiState.MovieSelectionHandler {

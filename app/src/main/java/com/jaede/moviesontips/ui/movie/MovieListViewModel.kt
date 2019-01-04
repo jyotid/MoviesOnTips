@@ -6,7 +6,6 @@ import android.arch.lifecycle.ViewModelProvider
 import com.jaede.moviesontips.controller.MovieController
 import com.jaede.moviesontips.data.model.MovieListResponse
 import com.jaede.moviesontips.ui.base.BaseViewModel
-import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject

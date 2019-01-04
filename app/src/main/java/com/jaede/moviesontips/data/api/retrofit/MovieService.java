@@ -1,5 +1,6 @@
 package com.jaede.moviesontips.data.api.retrofit;
 
+import com.jaede.moviesontips.data.model.Movie;
 import com.jaede.moviesontips.data.model.MovieListResponse;
 import com.jaede.moviesontips.data.model.PostResponseStatus;
 import com.jaede.moviesontips.data.model.Rating;
@@ -16,24 +17,30 @@ import retrofit2.http.Query;
 
 public interface MovieService {
   @GET("/3/movie/top_rated")
-  public Call<MovieListResponse> getTopRatedMovies(
+  Call<MovieListResponse> getTopRatedMovies(
       @Query("api_key") String api_key,
       @Query("language") String language,
       @Query("page") int page);
 
   @GET("/3/movie/now_playing")
-  public Call<MovieListResponse> getNowRunningMovies(
+  Call<MovieListResponse> getNowRunningMovies(
       @Query("api_key") String api_key,
       @Query("language") String language,
       @Query("page") int page);
 
   @GET("/3/movie/upcoming")
-  public Call<MovieListResponse> getUpcomingMovies(
+  Call<MovieListResponse> getUpcomingMovies(
       @Query("api_key") String api_key,
       @Query("language") String language,
       @Query("page") int page);
 
   @POST("/3/movie/{movie_id}/rating")
-  public Call<PostResponseStatus>  rateMovie(@Path("movie_id") Long movie_id,@Query("api_key")String api_key,@Body Rating task);
+  Call<PostResponseStatus>  rateMovie(@Path("movie_id") Long movie_id,
+      @Query("api_key") String api_key, @Body Rating task);
+
+
+  @POST("/3/movie/{movie_id}")
+  Call<Movie>  getMovie(@Path("movie_id") Long movie_id,
+      @Query("api_key") String api_key);
 }
 
