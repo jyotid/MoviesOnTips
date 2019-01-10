@@ -57,11 +57,5 @@ dependencies {
     kapt "android.arch.lifecycle:compiler:1.1.0"
     kapt 'com.android.databinding:compiler:3.0.1'
 
-    //Paging lib
-    implementation 'android.arch.paging:runtime:1.0.0'
-
-
-
-
 
 }
