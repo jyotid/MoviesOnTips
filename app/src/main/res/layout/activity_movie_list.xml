@@ -44,7 +44,6 @@
       android:paddingVertical="10dp"
       android:gravity="center"
       android:background="@drawable/shape_rounded_corner_blue"
-
       android:onClick="@{(v)->handler.onMovieSectionChanged(R.id.upcoming)}"/>
     <TextView
       android:id="@+id/topRated"

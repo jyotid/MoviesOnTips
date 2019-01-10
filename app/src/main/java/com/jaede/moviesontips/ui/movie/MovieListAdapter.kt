@@ -16,14 +16,15 @@ class MovieListAdapter(private var items: MutableList<MovieItemUiState>,private 
 
     override fun getItemCount() = items.size
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): MovieViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
         val itemView =  DataBindingUtil.inflate<ItemMovieItemBinding>(LayoutInflater.from(parent?.context),R.layout.item_movie_item,parent,false)
         return MovieViewHolder(itemView,itemView.root,items,handler)
     }
 
-    override fun onBindViewHolder(holder: MovieViewHolder?, position: Int) {
+    override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
         bindItemViews(holder,position)
     }
+
 
     private fun bindItemViews(holder: MovieListAdapter.MovieViewHolder?, position: Int){
         holder?.bindItems(position)
