@@ -15,6 +15,10 @@ import com.jaede.moviesontips.databinding.ActivityMovieListBinding
 import com.jaede.moviesontips.ui.base.BaseActivity
 import kotlinx.android.synthetic.main.activity_movie_list.*
 
+/***
+ * LEARN Pagination lib and use if for movie list pagination
+ */
+
 class MovieListActivity : BaseActivity(), MovieListUiState.MovieTypeSelectionHandler, MovieItemUiState.MovieSelectionHandler {
     private val factory = MovieListViewModel.ViewModelProviderFactory(MovieControllerImpl(MovieApiImpl(MovieServiceGenerator.createService(MovieService::class.java))))
     private val uiState = MovieListUiState()
