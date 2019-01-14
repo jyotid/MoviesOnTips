@@ -32,7 +32,7 @@ class MovieDataSource : PageKeyedDataSource<Int, Movie>(){
     override fun loadAfter(params: LoadParams<Int>, callback: LoadCallback<Int, Movie>) {
         controller.getNowPlayingMovies(params.key)
                 .subscribe({result->
-                    val nextPage = if (result.movies.size<30) null else params.key.plus(1)
+                    val nextPage = if (result.movies.size==0) null else params.key.plus(1)
                     callback.onResult(result.movies,nextPage)
                 },{})
     }
