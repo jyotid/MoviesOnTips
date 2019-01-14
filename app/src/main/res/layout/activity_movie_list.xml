@@ -66,9 +66,6 @@
       android:foregroundGravity="center"
       android:clipToPadding="false"
       android:overScrollMode="never"
-      android:paddingBottom="30dp"
-      bind:items="@{state.movies}"/>
-
-
+      android:paddingBottom="30dp"/>
   </LinearLayout>
 </layout>

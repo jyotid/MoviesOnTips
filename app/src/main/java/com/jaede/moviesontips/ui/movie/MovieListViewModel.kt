@@ -1,5 +1,6 @@
 package com.jaede.moviesontips.ui.movie
 
+import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
@@ -9,6 +10,11 @@ import com.jaede.moviesontips.ui.base.BaseViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
+import android.arch.paging.LivePagedListBuilder
+import android.arch.paging.PagedList
+import com.jaede.moviesontips.data.model.Movie
+import com.jaede.moviesontips.data.paginator.MovieDataSourceFactory
+
 
 /**
  * TODO:Ensure that whenever new movie type is selected, previous should get cancelled
@@ -25,17 +31,33 @@ class MovieListViewModel(private var controller: MovieController) : BaseViewMode
         MutableLiveData<List<MovieItemUiState>>()
     }
 
+    var newItem: LiveData<PagedList<Movie>>? = null
+
     val subject = PublishSubject.create<MOVIE_TYPE>()
 
+    private val movieDataSourceFactory: MovieDataSourceFactory by lazy {
+        MovieDataSourceFactory()
+    }
     init {
-        subscribeForFetchingMovies()
+        //subscribeForFetchingMovies()
+        initializePaging()
+    }
+
+    private fun initializePaging(){
+        val pagedListConfig = PagedList.Config.Builder()
+                .setEnablePlaceholders(true)
+                .setInitialLoadSizeHint(10)
+                .setPageSize(10).build()
+
+        newItem = LivePagedListBuilder(movieDataSourceFactory, pagedListConfig)
+                .build()
     }
 
     private fun subscribeForFetchingMovies() {
         subject
                 .switchMapSingle { type->
                     when(type){
-                        MOVIE_TYPE.NOW_RUNNING->return@switchMapSingle controller.getNowPlayingMovies().onErrorReturn { MovieListResponse() }
+                        MOVIE_TYPE.NOW_RUNNING->return@switchMapSingle controller.getNowPlayingMovies(1).onErrorReturn { MovieListResponse() }
                         MOVIE_TYPE.UPCOMING->return@switchMapSingle controller.getUpcomingMovies().onErrorReturn { MovieListResponse() }
                         MOVIE_TYPE.TOP_RATED->return@switchMapSingle controller.getTopRatedMovies().onErrorReturn { MovieListResponse() }
                     }

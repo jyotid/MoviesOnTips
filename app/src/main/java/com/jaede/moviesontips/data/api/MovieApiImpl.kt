@@ -35,8 +35,8 @@ class MovieApiImpl(private var service: MovieService) : MovieApi {
                 })
     }
 
-    override fun getNowPlayingMovies(callback: ApiResponseCallback<MovieListResponse>) {
-        service.getNowRunningMovies(BuildConfig.ApiKey, "en-US", 1)
+    override fun getNowPlayingMovies(page:Int,callback: ApiResponseCallback<MovieListResponse>) {
+        service.getNowRunningMovies(BuildConfig.ApiKey, "en-US", page)
                 .enqueue(object : Callback<MovieListResponse> {
                     override fun onResponse(call: Call<MovieListResponse>, response: Response<MovieListResponse>) {
                         if (response.isSuccessful) {

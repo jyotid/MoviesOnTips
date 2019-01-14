@@ -2,6 +2,8 @@ package com.jaede.moviesontips.data.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
+import android.support.v7.util.DiffUtil;
 import com.google.gson.annotations.SerializedName;
 
 /**
@@ -19,6 +21,27 @@ public class Movie implements Parcelable{
   protected Movie(Parcel in) {
     title = in.readString();
     overview = in.readString();
+  }
+
+  public static DiffUtil.ItemCallback<Movie> DIFF_CALLBACK = new DiffUtil.ItemCallback<Movie>() {
+    @Override
+    public boolean areItemsTheSame(@NonNull Movie oldItem, @NonNull Movie newItem) {
+      return oldItem.title.equals(newItem.title);
+    }
+
+    @Override
+    public boolean areContentsTheSame(@NonNull Movie oldItem, @NonNull Movie newItem) {
+      return oldItem.equals(newItem);
+    }
+  };
+
+  @Override
+  public boolean equals(Object obj) {
+    if (obj == this)
+      return true;
+
+    Movie article = (Movie) obj;
+    return article.title.equals(this.title);
   }
 
   public static final Creator<Movie> CREATOR = new Creator<Movie>() {

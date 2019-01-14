@@ -26,9 +26,9 @@ class MovieControllerImpl(private var api: MovieApi) : MovieController {
         }
     }
 
-    override fun getNowPlayingMovies(): Single<MovieListResponse> {
+    override fun getNowPlayingMovies(page:Int): Single<MovieListResponse> {
         return Single.create { s ->
-            api.getNowPlayingMovies(object : ApiResponseCallback<MovieListResponse> {
+            api.getNowPlayingMovies(page,object : ApiResponseCallback<MovieListResponse> {
                 override fun onSuccess(response: MovieListResponse) {
                     s.onSuccess(response)
                 }

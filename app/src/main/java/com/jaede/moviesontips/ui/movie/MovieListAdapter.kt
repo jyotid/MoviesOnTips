@@ -1,46 +1,37 @@
 package com.jaede.moviesontips.ui.movie
 
-
+import android.arch.paging.PagedListAdapter
 import android.databinding.DataBindingUtil
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import com.jaede.moviesontips.R
-import com.jaede.moviesontips.databinding.ItemMovieItemBinding
+import com.jaede.moviesontips.data.model.Movie
+import com.jaede.moviesontips.databinding.ItemMovieNewBinding
 
 /**
- * Created by jyotidubey on 29/12/18.
+ * Created by jyotidubey on 14/01/19.
  */
-class MovieListAdapter(private var items: MutableList<MovieItemUiState>,private var handler: MovieItemUiState.MovieSelectionHandler) : RecyclerView.Adapter<MovieListAdapter.MovieViewHolder>(){
-
-    override fun getItemCount() = items.size
+class MovieListAdapter(private var handler: MovieItemUiState.MovieSelectionHandler) : PagedListAdapter<Movie, MovieListAdapter.MovieViewHolder>(Movie.DIFF_CALLBACK){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
-        val itemView =  DataBindingUtil.inflate<ItemMovieItemBinding>(LayoutInflater.from(parent?.context),R.layout.item_movie_item,parent,false)
-        return MovieViewHolder(itemView,itemView.root,items,handler)
+        val itemView =  DataBindingUtil.inflate<ItemMovieNewBinding>(LayoutInflater.from(parent?.context), R.layout.item_movie_new,parent,false)
+        return MovieViewHolder(itemView,handler)
     }
 
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
         bindItemViews(holder,position)
     }
 
-
     private fun bindItemViews(holder: MovieListAdapter.MovieViewHolder?, position: Int){
-        holder?.bindItems(position)
+        holder?.bindItems(getItem(position))
     }
 
-    fun addItems(movies:List<MovieItemUiState>){
-        this.items.clear()
-        this.items.addAll(movies)
-    }
+    class MovieViewHolder(private var binding: ItemMovieNewBinding, private var handler: MovieItemUiState.MovieSelectionHandler) : RecyclerView.ViewHolder(binding.root){
 
-    class MovieViewHolder(private var binding:ItemMovieItemBinding,item:View, private var items: MutableList<MovieItemUiState>,private var handler: MovieItemUiState.MovieSelectionHandler) : RecyclerView.ViewHolder(item){
-
-        fun bindItems(position: Int) {
-            binding.state = items[position]
+        fun bindItems(movie: Movie?) {
+            binding.state = movie
             binding.handler = handler
-
 
         }
     }

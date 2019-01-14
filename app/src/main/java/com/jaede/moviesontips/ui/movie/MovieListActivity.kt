@@ -30,17 +30,18 @@ class MovieListActivity : BaseActivity(), MovieListUiState.MovieTypeSelectionHan
         binding = DataBindingUtil.setContentView(this@MovieListActivity, R.layout.activity_movie_list)
         viewModel = ViewModelProviders.of(this,factory).get(MovieListViewModel::class.java)
         viewPager.layoutManager = LinearLayoutManager(this)
-        viewPager.adapter = MovieListAdapter(mutableListOf(),this)
+        viewPager.adapter = MovieListAdapter(this)
         setDatabindingVariables()
         setLiveDataObservers()
-        viewModel.subject.onNext(MovieListViewModel.MOVIE_TYPE.NOW_RUNNING)
+        viewModel.newItem?.observe(this,
+                Observer { (viewPager.adapter as MovieListAdapter).submitList(it)
+                })
     }
 
     private fun setDatabindingVariables(){
         with(binding){
             state = uiState
             handler = this@MovieListActivity
-
         }
     }
 
