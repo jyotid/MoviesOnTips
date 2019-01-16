@@ -9,8 +9,8 @@ import io.reactivex.Single
  * Created by jyotidubey on 28/12/18.
  */
 interface MovieController{
-    fun getTopRatedMovies() : Single<MovieListResponse>
+    fun getTopRatedMovies(page:Int) : Single<MovieListResponse>
     fun getNowPlayingMovies(page:Int): Single<MovieListResponse>
-    fun getUpcomingMovies(): Single<MovieListResponse>
+    fun getUpcomingMovies(page:Int): Single<MovieListResponse>
     fun rateMovie(movieId: Long, rating: Rating):Single<PostResponseStatus>
 }

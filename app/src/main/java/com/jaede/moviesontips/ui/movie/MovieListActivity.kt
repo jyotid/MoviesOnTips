@@ -33,9 +33,12 @@ class MovieListActivity : BaseActivity(), MovieListUiState.MovieTypeSelectionHan
         viewPager.adapter = MovieListAdapter(this)
         setDatabindingVariables()
         setLiveDataObservers()
-        viewModel.newItem?.observe(this,
-                Observer { (viewPager.adapter as MovieListAdapter).submitList(it)
-                })
+
+        viewModel.newItem.observe(this, Observer {
+            it?.pagedList?.observe(this@MovieListActivity, Observer {
+                (viewPager.adapter as MovieListAdapter).submitList(it)
+            })
+        })
     }
 
     private fun setDatabindingVariables(){

@@ -13,7 +13,7 @@ import io.reactivex.Single
  */
 class MovieControllerImpl(private var api: MovieApi) : MovieController {
 
-    override fun getTopRatedMovies() : Single<MovieListResponse> {
+    override fun getTopRatedMovies(page:Int) : Single<MovieListResponse> {
         return Single.create { s ->
             api.getTopRatedMovies(object : ApiResponseCallback<MovieListResponse> {
                 override fun onSuccess(response: MovieListResponse) {
@@ -39,7 +39,7 @@ class MovieControllerImpl(private var api: MovieApi) : MovieController {
 
         }    }
 
-    override fun getUpcomingMovies(): Single<MovieListResponse> {
+    override fun getUpcomingMovies(page:Int): Single<MovieListResponse> {
         return Single.create { s ->
             api.getUpcomingMovies(object : ApiResponseCallback<MovieListResponse> {
                 override fun onSuccess(response: MovieListResponse) {

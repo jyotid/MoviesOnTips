@@ -4,16 +4,15 @@ import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
+import android.arch.paging.LivePagedListBuilder
+import android.arch.paging.PagedList
 import com.jaede.moviesontips.controller.MovieController
-import com.jaede.moviesontips.data.model.MovieListResponse
+import com.jaede.moviesontips.data.model.Movie
+import com.jaede.moviesontips.data.paginator.MovieDataSourceFactory
 import com.jaede.moviesontips.ui.base.BaseViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
-import android.arch.paging.LivePagedListBuilder
-import android.arch.paging.PagedList
-import com.jaede.moviesontips.data.model.Movie
-import com.jaede.moviesontips.data.paginator.MovieDataSourceFactory
 
 
 /**
@@ -31,45 +30,36 @@ class MovieListViewModel(private var controller: MovieController) : BaseViewMode
         MutableLiveData<List<MovieItemUiState>>()
     }
 
-    var newItem: LiveData<PagedList<Movie>>? = null
+    var newItem  = MutableLiveData<PagedResource<Movie>>()
 
     val subject = PublishSubject.create<MOVIE_TYPE>()
 
-    private val movieDataSourceFactory: MovieDataSourceFactory by lazy {
-        MovieDataSourceFactory()
-    }
+    private val pagedListConfig = PagedList.Config.Builder()
+            .setEnablePlaceholders(true)
+            .setInitialLoadSizeHint(10)
+            .setPageSize(10).build()
+
     init {
-        //subscribeForFetchingMovies()
-        initializePaging()
+        subscribeForFetchingMovies()
     }
 
-    private fun initializePaging(){
-        val pagedListConfig = PagedList.Config.Builder()
-                .setEnablePlaceholders(true)
-                .setInitialLoadSizeHint(10)
-                .setPageSize(10).build()
 
-        newItem = LivePagedListBuilder(movieDataSourceFactory, pagedListConfig)
-                .build()
-    }
+    data class PagedResource<T>(val pagedList: LiveData<PagedList<T>>)
 
     private fun subscribeForFetchingMovies() {
         subject
-                .switchMapSingle { type->
-                    when(type){
-                        MOVIE_TYPE.NOW_RUNNING->return@switchMapSingle controller.getNowPlayingMovies(1).onErrorReturn { MovieListResponse() }
-                        MOVIE_TYPE.UPCOMING->return@switchMapSingle controller.getUpcomingMovies().onErrorReturn { MovieListResponse() }
-                        MOVIE_TYPE.TOP_RATED->return@switchMapSingle controller.getTopRatedMovies().onErrorReturn { MovieListResponse() }
+                .map { type ->
+                    when (type) {
+                        MOVIE_TYPE.NOW_RUNNING -> return@map LivePagedListBuilder(MovieDataSourceFactory(MovieDataSourceFactory.MOVIE_TYPE.NOW_RUNNING), pagedListConfig).build()
+                        MOVIE_TYPE.UPCOMING -> return@map LivePagedListBuilder(MovieDataSourceFactory(MovieDataSourceFactory.MOVIE_TYPE.UPCOMING), pagedListConfig)
+                                .build()
+                        MOVIE_TYPE.TOP_RATED -> return@map LivePagedListBuilder(MovieDataSourceFactory(MovieDataSourceFactory.MOVIE_TYPE.TOP_RATED), pagedListConfig)
+                                .build()
                     }
-                }
-                .map { movieResponse ->
-                    val movies = movieResponse.movies
-                    val movieItemUiState = mutableListOf<MovieItemUiState>()
-                    movies.mapTo(movieItemUiState) { MovieItemUiState(it) }
                 }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe ({movies -> this.item.value = movies },{ err-> System.out.println("ERRORRRRR")})
+                .subscribe({ movies -> newItem.postValue(PagedResource(movies)) }, { err -> System.out.println("ERRORRRRR") })
 
     }
 
