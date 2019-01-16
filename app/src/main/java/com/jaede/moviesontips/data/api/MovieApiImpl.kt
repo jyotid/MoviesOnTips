@@ -16,8 +16,8 @@ import retrofit2.Response
  */
 class MovieApiImpl(private var service: MovieService) : MovieApi {
 
-    override fun getTopRatedMovies(callback: ApiResponseCallback<MovieListResponse>) {
-        service.getTopRatedMovies(BuildConfig.ApiKey, "en-US", 1)
+    override fun getTopRatedMovies(page: Int,callback: ApiResponseCallback<MovieListResponse>) {
+        service.getTopRatedMovies(BuildConfig.ApiKey, "en-US", page)
                 .enqueue(object : Callback<MovieListResponse> {
                     override fun onResponse(call: Call<MovieListResponse>, response: Response<MovieListResponse>) {
                         if (response.isSuccessful) {
@@ -54,8 +54,8 @@ class MovieApiImpl(private var service: MovieService) : MovieApi {
                 })
     }
 
-    override fun getUpcomingMovies(callback: ApiResponseCallback<MovieListResponse>) {
-        service.getUpcomingMovies(BuildConfig.ApiKey, "en-US", 1)
+    override fun getUpcomingMovies(page: Int,callback: ApiResponseCallback<MovieListResponse>) {
+        service.getUpcomingMovies(BuildConfig.ApiKey, "en-US", page)
                 .enqueue(object : Callback<MovieListResponse> {
                     override fun onResponse(call: Call<MovieListResponse>, response: Response<MovieListResponse>) {
                         if (response.isSuccessful) {

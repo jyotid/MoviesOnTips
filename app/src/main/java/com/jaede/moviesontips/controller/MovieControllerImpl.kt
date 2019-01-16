@@ -15,7 +15,7 @@ class MovieControllerImpl(private var api: MovieApi) : MovieController {
 
     override fun getTopRatedMovies(page:Int) : Single<MovieListResponse> {
         return Single.create { s ->
-            api.getTopRatedMovies(object : ApiResponseCallback<MovieListResponse> {
+            api.getTopRatedMovies(page,object : ApiResponseCallback<MovieListResponse> {
                 override fun onSuccess(response: MovieListResponse) {
                     s.onSuccess(response)
                 }
@@ -41,7 +41,7 @@ class MovieControllerImpl(private var api: MovieApi) : MovieController {
 
     override fun getUpcomingMovies(page:Int): Single<MovieListResponse> {
         return Single.create { s ->
-            api.getUpcomingMovies(object : ApiResponseCallback<MovieListResponse> {
+            api.getUpcomingMovies(page,object : ApiResponseCallback<MovieListResponse> {
                 override fun onSuccess(response: MovieListResponse) {
                     s.onSuccess(response)
                 }

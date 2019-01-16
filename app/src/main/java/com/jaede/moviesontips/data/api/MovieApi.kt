@@ -8,9 +8,9 @@ import com.jaede.moviesontips.data.model.Rating
  * Created by jyotidubey on 28/12/18.
  */
 interface MovieApi{
-    fun getTopRatedMovies(callback: ApiResponseCallback<MovieListResponse>)
+    fun getTopRatedMovies(page: Int,callback: ApiResponseCallback<MovieListResponse>)
     fun getNowPlayingMovies(page:Int,callback: ApiResponseCallback<MovieListResponse>)
-    fun getUpcomingMovies(callback: ApiResponseCallback<MovieListResponse>)
+    fun getUpcomingMovies(page: Int,callback: ApiResponseCallback<MovieListResponse>)
     fun rateMovie(movieId: Long, rating: Rating,callback: ApiResponseCallback<PostResponseStatus>)
 
 
