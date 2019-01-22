@@ -6,7 +6,6 @@ import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
 import android.arch.paging.LivePagedListBuilder
 import android.arch.paging.PagedList
-import com.jaede.moviesontips.controller.MovieController
 import com.jaede.moviesontips.data.model.Movie
 import com.jaede.moviesontips.data.paginator.MovieDataSourceFactory
 import com.jaede.moviesontips.ui.base.BaseViewModel
@@ -20,7 +19,7 @@ import io.reactivex.subjects.PublishSubject
  * TODO: Fetch movie detail and display
  * Created by jyotidubey on 29/12/18.
  */
-class MovieListViewModel(private var controller: MovieController) : BaseViewModel() {
+class MovieListViewModel() : BaseViewModel() {
 
     enum class MOVIE_TYPE {
         NOW_RUNNING, UPCOMING, TOP_RATED
@@ -63,11 +62,11 @@ class MovieListViewModel(private var controller: MovieController) : BaseViewMode
 
     }
 
-    class ViewModelProviderFactory(private var controller: MovieController) : ViewModelProvider.NewInstanceFactory() {
+    class ViewModelProviderFactory : ViewModelProvider.NewInstanceFactory() {
 
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             if (modelClass.isAssignableFrom(MovieListViewModel::class.java)) {
-                return MovieListViewModel(controller) as T
+                return MovieListViewModel() as T
             }
             throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
         }

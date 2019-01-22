@@ -19,7 +19,5 @@ open class BaseActivity : AppCompatActivity(){
         viewModel.errorState.observe(this, Observer {
             Toast.makeText(this,it?.message,Toast.LENGTH_LONG).show()
         })
-
-
     }
 }
